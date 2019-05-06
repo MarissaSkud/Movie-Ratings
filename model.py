@@ -36,6 +36,9 @@ class Movie(db.Model):
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String, nullable=True)
 
+    def __repr__(self):
+        return(f"<Movie id={self.user_id} title={self.title}>")
+
 
 class Rating(db.Model):
 
