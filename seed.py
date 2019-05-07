@@ -74,7 +74,6 @@ def load_ratings():
     for row in open("seed_data/u.data"):
         row = row.rstrip()
         row = row.split("\t")
-        print(row,"==========================")
 
         movie_id = row[1] 
         user_id = row[0]
