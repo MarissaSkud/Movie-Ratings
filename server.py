@@ -1,11 +1,13 @@
 """Movie Ratings."""
 
 from jinja2 import StrictUndefined
-
-from flask import Flask
+from flask import (Flask, render_template, redirect, request, flash,
+                   session)
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db
+
+from model import User, Rating, Movie, connect_to_db, db
+
 
 
 app = Flask(__name__)
@@ -22,7 +24,41 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage."""
-    return "<html><body>Placeholder for the homepage.</body></html>"
+    return render_template("homepage.html")
+
+
+@app.route('/users')
+def user_list():
+
+    users = User.query.all()
+    return render_template("user_list.html", users=users)
+
+
+@app.route('/registration-form')
+def show_registration():
+
+    return render_template("registration-form.html")
+
+
+@app.route('/sign-up', methods=["POST"])
+def register():
+
+    email = request.form['email']
+    password = request.form['password']
+
+    match = User.query.filter_by(email=email).all()
+    print("~~~~~~~~~~~", match, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    if not match:
+        print("list is empty" "++++++++++++++++++++++++++++++++++++")
+
+    #query database for email 
+        #if exisists 
+            #alert user (success msg))
+        #else
+            # add user to database 
+                # upon success send message 
+
+    return render_template()
 
 
 if __name__ == "__main__":
