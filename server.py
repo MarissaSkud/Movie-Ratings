@@ -71,22 +71,32 @@ def show_login():
 def login():
     email = request.args['email']
     password = request.args['password']
-    login= 'false'
     user = User.query.filter_by(email=email).first()
 
     if password == user.password:
         session['user_id'] = user.user_id
-        login = 'true'
 
         flash("Login successful")
-        return redirect("/", login=login)
+        return redirect("/")
 
 
+@app.route('/logout')
+def logout():
+    session.pop('user_id')
 
-# @app.route('/logout')
-# def logout():
-#     session['user_id'].pop()
-#     return redirect("/")
+    flash("Logout successful")
+    return redirect("/")
+
+
+@app.route('/users/<user_id>')
+def show_user_page(user_id):
+    user = User.query.filter_by(user_id=user_id).one()
+    age = user.age
+    zipcode = user.zipcode
+
+    
+
+    return "HELLO"
 
 
 if __name__ == "__main__":

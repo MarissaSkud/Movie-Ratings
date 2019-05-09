@@ -10,13 +10,23 @@
 
   {% for message in get_flashed_messages() %}
     {{ message }}
+
   {% endfor %}
 
-    {% if login == 'true' %}
-        User ID: {{ session['user_id'] }}
-        
- 
+  {% if session.get('user_id') %}
+
+    User ID: {{ session['user_id'] }}
+       <br>
+        <form action="/logout" method="GET">
+            <input type="submit" name="Logout" value="Logout">
+        </form>
+
+    {% else %}
+
+        <a href="/login-form">Login</a>
+
     {% endif %}
+
 
 
   {% block content %} put your content here {% endblock %}

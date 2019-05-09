@@ -7,3 +7,8 @@
  
   {% endif %}
    -->
+
+   <br>
+        <form action="/logout" method="GET">
+            <input type="submit" name="Logout" value="Logout">
+        </form>
