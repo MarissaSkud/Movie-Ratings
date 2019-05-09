@@ -42,23 +42,51 @@ def show_registration():
 
 @app.route('/sign-up', methods=["POST"])
 def register():
+    """Check if user email exists in database and add them as new user if not"""
 
     email = request.form['email']
     password = request.form['password']
 
     match = User.query.filter_by(email=email).all()
-    print("~~~~~~~~~~~", match, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
     if not match:
-        print("list is empty" "++++++++++++++++++++++++++++++++++++")
+        new_user = User(email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        return render_template("registration-submitted.html", status="added",
+            email=email)
 
-    #query database for email 
-        #if exisists 
-            #alert user (success msg))
-        #else
-            # add user to database 
-                # upon success send message 
+    else:
+        return render_template("registration-submitted.html", status="preexisting", 
+            email=email)
 
-    return render_template()
+
+@app.route('/login-form')
+def show_login():
+
+    return render_template("login-form.html") 
+
+
+@app.route('/login')
+def login():
+    email = request.args['email']
+    password = request.args['password']
+    login= 'false'
+    user = User.query.filter_by(email=email).first()
+
+    if password == user.password:
+        session['user_id'] = user.user_id
+        login = 'true'
+
+        flash("Login successful")
+        return redirect("/", login=login)
+
+
+
+# @app.route('/logout')
+# def logout():
+#     session['user_id'].pop()
+#     return redirect("/")
 
 
 if __name__ == "__main__":

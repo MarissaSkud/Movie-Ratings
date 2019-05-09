@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if status == "added" %}
+{{email}}, you are successfully added as a user!
+{% endif %}
+
+{% if status == "preexisting" %}
+{{email}}, you already exist in our database
+{% endif %}
+
+{% endblock %}

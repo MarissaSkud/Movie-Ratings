@@ -1,0 +1,9 @@
+  <!-- {% if session['user_id'] %}
+        User ID: {{ session['user_id'] }}
+        <br>
+        <form action="/logout" method="GET">
+            <input type="submit" name="Logout" value="Logout">
+        </form>
+ 
+  {% endif %}
+   -->
