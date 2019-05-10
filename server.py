@@ -93,10 +93,52 @@ def show_user_page(user_id):
     user = User.query.filter_by(user_id=user_id).one()
     age = user.age
     zipcode = user.zipcode
+    scored_movies = db.session.query(Rating.score, Movie.title).filter_by(user_id=user_id).join(Movie).all()
+    #print(scored_movies, "+++++++++++++++++++++++++++++++++++++++++")
 
-    
+    return render_template("user_page.html", user_id=user_id,
+                                             age=age,
+                                             zipcode=zipcode,
+                                             scored_movies=scored_movies)
 
-    return "HELLO"
+@app.route('/movies')
+def movie_list():
+    movies = Movie.query.order_by(Movie.title).all()
+
+    return render_template("movie_list.html", movies=movies)
+
+
+@app.route('/movies/<movie_id>')
+def show_movie_page(movie_id):
+
+    movie = Movie.query.filter_by(movie_id=movie_id).one()
+    title = movie.title
+    released = movie.released_at
+    scores = Rating.query.filter_by(movie_id=movie_id).all()
+
+    return render_template("movie_page.html", movie_id=movie_id,
+                    title=title, released=released, scores=scores)
+
+
+@app.route('/rate-movie', methods=["POST"])
+def add_rating():
+
+    user_id = session["user_id"]
+    movie_id = request.form['movie']
+    score = request.form["Rating"]
+
+    rating_lookup = Rating.query.filter_by(user_id=user_id, movie_id=movie_id)
+
+    if not rating_lookup:
+        new_rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
+        db.session.add(new_rating)
+        db.session.commit()
+
+    else:
+        rating_lookup.score = score
+
+    flash("Rating added")
+    return redirect(f"/movies/{movie_id}")
 
 
 if __name__ == "__main__":

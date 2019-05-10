@@ -86,7 +86,8 @@ def load_ratings():
         db.session.add(rating)
 
     db.session.commit()
-       
+
+
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
@@ -96,6 +97,18 @@ def set_val_user_id():
 
     # Set the value for the next user_id to be max_id + 1
     query = "SELECT setval('users_user_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+
+def set_val_rating_id():
+
+    # Get the Max ratingid in the database
+    result = db.session.query(func.max(Rating.rating_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('ratings_rating_id_seq', :new_id)"
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
@@ -111,3 +124,4 @@ if __name__ == "__main__":
     load_movies()
     load_ratings()
     set_val_user_id()
+    set_val_rating_id()

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h2>{{title}}</h2>
+
+  Movie ID: {{movie_id}}<br>
+  Release Date: {{released}}<br>
+
+All Scores
+  <ul>
+    {% for score in scores %}
+      <li>
+       {{score.score}}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if session.get('user_id') %}
+
+  Rate this movie!
+  <form action="/rate-movie" method="POST">
+    <input type="hidden" name="movie" value="{{movie_id}}">
+    <input type="text" name="Rating">
+    <input type="submit" name="Submit">
+  </form>
+
+
+    {% endif %}
+
+
+{% endblock %}
